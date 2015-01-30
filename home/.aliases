@@ -1,0 +1,57 @@
+alias be='bundle exec'
+alias bi='bundle install'
+
+alias cr='cabal run'
+alias ci='cabal install'
+
+alias philosophy="open -a 'Google Chrome' http://philosophy.stackexchange.com/"
+alias ia="open -a 'iA Writer'"
+
+# alias git to gh
+# eval "$(gh alias -s)"
+
+attach_or_create_tmux_session () { 
+  local SESSION_NAME=${1-dev}
+  local COMMAND=${2-"vim ."}
+  tmux has-session -t $SESSION_NAME 2>/dev/null
+  if [ "$?" -eq 1 ] ; then
+    echo create new session
+    tmux new -s "$SESSION_NAME" -d "$COMMAND"
+  fi
+  tmux attach -t $SESSION_NAME 
+}
+
+attach_or_create_development_session() {
+  local PROJECT=${1-jupiter}
+  local GROUP=${2-etc}
+  local SESSION_NAME=${3-$PROJECT}
+  local COMMAND=${4-"vim ."}
+  
+  cd ~/Development/$GROUP/$PROJECT
+  attach_or_create_tmux_session "$SESSION_NAME" $COMMAND
+}
+
+alias dev='attach_or_create_development_session'
+
+create_ruby_project() {
+  local PROJECT=$1
+  local GROUP=${2-etc}
+  cd ~/Development/$GROUP/
+  mine $PROJECT && dev $PROJECT
+}
+
+create_rails_project() {
+  local PROJECT=$1
+  local GROUP=${2-etc}
+  cd ~/Development/$GROUP/
+  raygun $PROJECT && dev $PROJECT
+}
+
+alias rubyapp='create_ruby_project'
+alias railsapp='create_rails_project'
+
+for project_name in ~/Development/etc/*; do
+  hash -d "${project_name:t}=${project_name}"
+done
+
+alias cssp='clear; ssp'
