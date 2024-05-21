@@ -13,6 +13,7 @@ alias gd='git diff'
 alias glg='git log --graph --oneline'
 alias ga='git add'
 alias gco='git checkout'
+alias gp='git push'
 alias hb='gh pr view --web'                                                                                                                                          
 EOL
 
